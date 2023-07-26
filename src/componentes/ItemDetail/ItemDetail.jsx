@@ -1,18 +1,31 @@
 
-import Card from 'react-bootstrap/Card';
+import React, { useState } from 'react';
+import ItemCount from '../ItemCount/ItemCount';
+import { Link } from 'react-router-dom';
+import { CarritoContext } from '../../context/CarritoContext';
+import { useContext } from 'react';
+const ItemDetail = ({id, nombre, precio, img, stock}) => {
+  const [agregarCantidad, setAgregarCantidad] = useState(0);
 
-const ItemDetail = ({id, nombre, precio, img}) => {
+  const {agregarProducto} = useContext(CarritoContext);
+
+  const manejadorCantidad = (cantidad) => {
+    setAgregarCantidad(cantidad);
+    const item = {id, nombre, precio};
+    agregarProducto(item, cantidad);
+  }
+
   return (
     <div>
-        <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={img} />
-          <Card.Body>
-            <Card.Title>{nombre}</Card.Title>
-            <Card.Text>{precio}</Card.Text>
-            <Card.Text>{id}</Card.Text>
-            <Card.Text> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam, dolores voluptatum? Repellendus culpa fugiat officia suscipit magnam atque, labore inventore deserunt adipisci sit earum, porro, ullam quos nostrum non aperiam! </Card.Text>
-          </Card.Body>
-        </Card>
+        <h2> Nombre: {nombre} </h2>
+        <h3> Precio: {precio} </h3>
+        <h3>ID: {id} </h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <img src={img} alt={nombre} />
+            {
+              agregarCantidad > 0 ? (<Link to="/cart"> Terminar Compra </Link>) : (<ItemCount inicial={1} stock={stock} funcionAgregar={manejadorCantidad}/>)
+            }
+          
     </div>
   )
 }
